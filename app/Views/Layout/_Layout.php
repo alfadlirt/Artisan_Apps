@@ -28,8 +28,8 @@
             <!-- LOGO -->
             <div class="topbar-left">
                 <a href="index.html" class="logo">
-                    <img src="<?= base_url('public/assets-customer/images/heraio-logo-hor.png')?>" class="logo-lg" alt="" height="50">
-                    <img src="<?= base_url('public/assets-customer/images/heraio-logo-hor.png')?>" class="logo-sm" alt="" height="24">
+                    <img src="<?= base_url('public/assets/images/logo-artisan.png')?>" class="logo-lg" alt="" height="80">
+                    <img src="<?= base_url('public/assets/images/logo-artisan.png')?>" class="logo-sm" alt="" height="50">
                 </a>
             </div>
 
@@ -85,25 +85,13 @@
                     <ul class="metismenu" id="side-menu">
                         <li class="menu-title">Menu</li>
                         <li>
-                            <a href="<?= base_url('Robot/Index')?>" class="waves-effect"><i class="mdi mdi-robot"></i><span>Robot</span></a>
+                            <a href="<?= base_url('Category/Index')?>" class="waves-effect"><i class="mdi mdi-file-document-box-multiple-outline"></i><span>Category</span></a>
                         </li>
                         <li>
-                            <a href="<?= base_url('Feature/Index')?>" class="waves-effect"><i class="mdi mdi-flash"></i><span>Feature</span></a>
+                            <a href="<?= base_url('Expedition/Index')?>" class="waves-effect"><i class="mdi mdi-flash"></i><span>Expedition</span></a>
                         </li>
                         <li>
-                            <a href="<?= base_url('NFT/Index')?>" class="waves-effect"><i class="mdi mdi-coin"></i><span>NFT Token</span></a>
-                        </li>
-                        <li>
-                            <a href="<?= base_url('NFTCatalog/Index')?>" class="waves-effect"><i class="mdi mdi-picture-in-picture-bottom-right"></i><span>NFT Catalog</span></a>
-                        </li>
-                        <li>
-                            <a href="<?= base_url('Powerup/Index')?>" class="waves-effect"><i class="mdi mdi-fire"></i><span>Powerups</span></a>
-                        </li>
-                        <li>
-                            <a href="<?= base_url('Customer/Index')?>" class="waves-effect"><i class="mdi mdi-file-document-box-multiple-outline"></i><span>Customer</span></a>
-                        </li>
-                        <li>
-                            <a href="<?= base_url('Admin/Index')?>" class="waves-effect"><i class="mdi mdi-account"></i><span>Admin</span></a>
+                            <a href="<?= base_url('Payment/Index')?>" class="waves-effect"><i class="mdi mdi-coin"></i><span>Payment</span></a>
                         </li>
                     </ul>
 

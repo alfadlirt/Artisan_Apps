@@ -4,10 +4,10 @@ namespace APP\Models;
 
 use CodeIgniter\Model;
 
-class AdminModel extends Model
+class CustomerModel extends Model
 {
-    protected $table = 'admin';
-    protected $primaryKey = 'adm_id';
+    protected $table = 'customer';
+    protected $primaryKey = 'cst_id';
     protected $useTimestamps = false;
     protected $allowedFields = [
         'f_name', 

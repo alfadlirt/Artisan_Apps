@@ -31,34 +31,15 @@ $routes->setAutoRoute(true);
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->get('/', 'CustomerPage::index');
-$routes->get('/my-robot', 'CustomerPage::MyRobot');
-$routes->get('/login', 'Login::index');
-$routes->get('/redeem-token', 'Login::Redeem');
-$routes->get('/register', 'Login::Register');
-$routes->get('/login-admin', 'Login::Admin');
-$routes->get('/DashboardAdmin', 'Home::index');
-$routes->get('/Logout', 'Login::Logout');
+$routes->get('/', 'Portal::AdminLogin');
+$routes->get('/Dashboard', 'Home::Index');
 
+$routes->post('/login/auth', 'Portal::authentication');
+$routes->get('/logout', 'Portal::logout');
 
-$routes->get('/login', 'UserLogin::index');
-$routes->get('/account/logout', 'UserLogin::logout');
-$routes->get('/shop', 'Shop::shoppage');
-$routes->get('/myorder', 'Shop::myorder');
-$routes->get('/mycart', 'Shop::cartpage');
-$routes->get('/account', 'UserLogin::myaccount');
-$routes->get('/account/register', 'UserLogin::register');
-$routes->get('/account/accountcreated', 'UserLogin::accountcreated');
-$routes->get('/account/verification/(:segment)', 'UserLogin::verification/$1');
-$routes->get('/checkout', 'Shop::checkoutpage');
-$routes->get('/order/(:segment)', 'Shop::order/$1');
-$routes->get('/admin', 'Home::index');
-$routes->get('/superadmin', 'KaryawanLogin::superadmin');
-$routes->get('/Shop/addtocart', 'Shop::addtocart');
-$routes->get('/product/(:segment)', 'Shop::detail/$1');
-$routes->get('/myorder/(:segment)', 'Shop::orderdetail/$1');
-$routes->get('/myorder/confirmpayment/(:segment)', 'Shop::confirmpayment/$1');
-$routes->get('qa/(:segment)/delete', 'qa::delete/$1');
+$routes->get('/profile', 'UserLogin::profile');
+$routes->get('/profile/edit', 'UserLogin::editModeProfile');
+$routes->post('/profile/save', 'UserLogin::updateProfile');
 
 
 /**

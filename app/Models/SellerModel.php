@@ -4,12 +4,15 @@ namespace APP\Models;
 
 use CodeIgniter\Model;
 
-class AdminModel extends Model
+class SellerModel extends Model
 {
-    protected $table = 'admin';
-    protected $primaryKey = 'adm_id';
+    protected $table = 'seller';
+    protected $primaryKey = 'slr_id';
     protected $useTimestamps = false;
     protected $allowedFields = [
+        'shop_name', 
+        'shop_description', 
+        'shop_address', 
         'f_name', 
         'l_name', 
         'telp', 

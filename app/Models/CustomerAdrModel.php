@@ -11,7 +11,9 @@ class CustomerAdrModel extends Model
     protected $useTimestamps = false;
     protected $allowedFields = [
         'cst_id', 
+        'adr_name',
         'receipent', 
+        'address', 
         'telp', 
         'notes', 
         'is_main',

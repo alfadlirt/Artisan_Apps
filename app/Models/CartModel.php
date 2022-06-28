@@ -7,6 +7,7 @@ use CodeIgniter\Model;
 class CartModel extends Model
 {
     protected $table = 'cart';
+    protected $primaryKey = 'crt_id';
     protected $useTimestamps = false;
     protected $allowedFields = [
         'cst_id', 

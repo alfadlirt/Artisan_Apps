@@ -29,7 +29,7 @@
                     <?php $validation = \Config\Services::validation(); ?>
                     <div style="margin-top:50px">
                     <form method="post" action="<?= base_url('Payment/Update') ?>">
-                        <input type="hidden" name="adm_id" value="<?= $data['pym_id'] ?>" />
+                        <input type="hidden" name="pym_id" value="<?= $data['pym_id'] ?>" />
                         <div class="form-group">
                             <label>PAYMENT NAME</label><span style="color:red;">*</span>
                             <input name="pym_name" class="form-control" type="text" value="<?=isset($data)?$data['pym_name']:''?>">

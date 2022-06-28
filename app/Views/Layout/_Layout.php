@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
-    <title>Heraio Admin Apps</title>
+    <title>Artisan Admin Apps</title>
     <meta content="Responsive admin theme build on top of Bootstrap 4" name="description" />
     <meta content="Themesdesign" name="author" />
     <link rel="shortcut icon" href="<?= base_url('public/assets/images/favicon.ico')?>">
@@ -120,7 +120,7 @@
             </div>
             <!-- content -->
 
-            <footer class="footer">© 2022 Heraio Admin Application.</footer>
+            <footer class="footer">© 2022 Artisan Admin Application.</footer>
 
         </div>
         <!-- ============================================================== -->
@@ -153,7 +153,7 @@
                     cancelButtonClass: 'btn btn-danger ml-2',
                     confirmButtonText: 'Confirm!'
                 }).then(function () {
-                    window.location.href = <?="'".base_url('Logout')."'"?>;
+                    window.location.href = <?="'".base_url('logout')."'"?>;
                 })
             });
         });

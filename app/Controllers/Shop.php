@@ -352,13 +352,13 @@ class Shop extends BaseController
                         'telp'=> $this->request->getPost('telp'),
                         'email'=> $this->request->getPost('email'),
                         'usrname'=> $this->request->getPost('usrname'),
-                        'modified_by' => $this->session->get('user_username')//'system'//$session->get('user_id')
+                        'modified_by' => 'system'//$session->get('user_id')
                     ]);
                     break;
                 case "pass":
                     $this->CustomerModel->update($id,[
                         'pswrd'=> password_hash($this->request->getPost('newpass1'), PASSWORD_DEFAULT),
-                        'modified_by' => $this->session->get('user_username')//'system'//$session->get('user_id')
+                        'modified_by' => 'system'//$session->get('user_id')
                     ]);
                     break;
             }

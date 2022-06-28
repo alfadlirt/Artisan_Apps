@@ -11,7 +11,7 @@
 								</div>
 								<div class="breadcumbs pb-15">
 									<ul>
-										<li><a href="index.html">Home</a></li>
+										<li><a href="<?=base_url()?>">Home</a></li>
 										<li>Order Placed</li>
 									</ul>
 								</div>

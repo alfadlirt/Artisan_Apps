@@ -102,14 +102,14 @@ class Shop extends BaseController
 			$paginateData = $builder
 			->join($this->ProductPicModel->table, $this->ProductPicModel->table.'.prd_id = '.$this->ProductModel->table.'.prd_id', 'left')->paginate($pagesize);
 		} else {
-			if(!strlen($searchData['keyword'])&&$searchData['status']=='0'){
+			if(!strlen($searchData['keyword'])){
 				$paginateData = $builder
 			->join($this->ProductPicModel->table, $this->ProductPicModel->table.'.prd_id = '.$this->ProductModel->table.'.prd_id', 'left')->paginate($pagesize);
 			}
 			else{
 				$paginateData = $builder->select('*')
 				->join($this->ProductPicModel->table, $this->ProductPicModel->table.'.prd_id = '.$this->ProductModel->table.'.prd_id', 'left')
-				->like('prd_name', (strlen($searchData['keyword'])?$searchData['keyword']:''), (strlen($searchData['keyword'])?'both':'none'))
+				->like('name', (strlen($searchData['keyword'])?$searchData['keyword']:''), (strlen($searchData['keyword'])?'both':'none'))
 				->where('status', 1)
 				->paginate($pagesize);
 			}
@@ -556,7 +556,7 @@ class Shop extends BaseController
         $id_cust = $this->userid;//$session->get('user_id');
         if ($this->request->isAJAX()) {
             header('Content-Type: application/json');
-            $count = $this->CartModel->where('cst_id', $id_cust)->countAll();
+            $count = $this->CartModel->where('cst_id', $id_cust)->countAllResults();
             echo json_encode($count);
         }
     }
@@ -615,7 +615,7 @@ class Shop extends BaseController
 				}
 				else{
 					$this->CartModel->save([
-						'cst_id'=> 1,
+						'cst_id'=> $custid,
 						'prd_id'=> $productid,
 						'prd_dtl_id'=> $detailid,
 						'qty'=> $qty,

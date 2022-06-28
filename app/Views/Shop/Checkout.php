@@ -11,7 +11,7 @@
 								</div>
 								<div class="breadcumbs pb-15">
 									<ul>
-										<li><a href="index.html">Home</a></li>
+										<li><a href="<?=base_url()?>">Home</a></li>
 										<li>Shopping Cart</li>
 									</ul>
 								</div>
@@ -29,7 +29,7 @@
 							<div class="shopping-cart">
 								<!-- Nav tabs -->
 								<ul class="cart-page-menu nav row clearfix mb-30">
-									<li><a class="active" href="#" data-bs-toggle="tab">Checkout</a></li>
+									<li><a class="active" href="<?=base_url()?>" data-bs-toggle="tab">Checkout</a></li>
 								</ul>
 
 								<!-- Tab panes -->

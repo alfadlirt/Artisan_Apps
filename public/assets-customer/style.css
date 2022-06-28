@@ -1099,7 +1099,10 @@ pre {
 	11. Shop-page
 ----------------------------------- */
 .heading-banner-area {
-  background: rgba(0, 0, 0, 0) url("img/bg/1.jpg") no-repeat scroll center center / cover ;
+  background: rgba(0, 0, 0, 0) url("img/banner-cart.jpg") no-repeat scroll center center / cover ;
+}
+.heading-banner-area2 {
+  background: rgba(0, 0, 0, 0) url("img/banner-cart2.jpg") no-repeat scroll center center / cover ;
 }
 .heading-banner-title h2 {
   position: relative;

@@ -56,14 +56,21 @@
                                         <?php foreach ($data as $row) :
                                         ?>
 															<tr>
-																<td class="product-thumbnail  text-left">
+																<input type="hidden" class="cart_id" value="<?=$row['crt_id']?>"/>
+																<td class="product-thumbnail text-left">
 																	<!-- Single-product start -->
 																	<div class="single-product">
 																		<div class="product-img">
-																			<a href="single-product.html"><img src="img/product/2.jpg" alt="" /></a>
+																			<a href="<?=base_url('product/'.$row['slug'])?>">
+																				<?php if(isset($row['pic_data'])):?>
+																					<img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($row['pic_data']); ?>" alt="" />
+																				<?php else:?>
+																					<img src="img/product/2.jpg" alt="" />
+																				<?php endif?>
+																			</a>
 																		</div>
 																		<div class="product-info">
-																			<h4 class="post-title"><a class="text-light-black" href="#"><?=$row['name']?></a></h4>
+																			<h4 class="post-title"><a class="text-light-black" href="<?=base_url('product/'.$row['slug'])?>"><?=$row['name']?></a></h4>
 																			<p class="mb-0">Variation : <?=$row['variation_name']?></p>
 																		</div>
 																	</div>
@@ -81,7 +88,7 @@
                                                                 ?>
 																<td class="product-subtotal">Rp <?=$tt?></td>
 																<td class="product-remove">
-																	<a href="#"><i class="zmdi zmdi-close"></i></a>
+																	<a href="#" class="btnRemove"><i class="zmdi zmdi-close"></i></a>
 																</td>
                                                                 <input type="hidden" class="price" value="<?=$row['price']?>"/>
 															</tr>
@@ -107,7 +114,7 @@
                                                         <input type="hidden" id="voucherhdn" name="voucher" value="0">
 														<input type="text" placeholder="Enter your code here." id="voucherinput">
 														<?php if(sizeof($data)!=0):?>
-														<button type="button" data-text="apply voucher" class="button-one submit-button mt-15">apply voucher</button>
+														<button id="applyBtn" type="button" data-text="apply voucher" class="button-one submit-button mt-15">apply voucher</button>
 														<?php endif?>
 													</div>
 												</div>
@@ -124,11 +131,11 @@
 																</tr>
                                                                 <tr>
 																	<td class="text-left">Discount</td>
-																	<td class="text-end">Rp 0</td>
+																	<td class="text-end" id="lblDiscount">Rp 0</td>
 																</tr>
 																<tr>
 																	<td class="text-left">Total</td>
-																	<td class="text-end">Rp <?=$subtotal?></td>
+																	<td class="text-end" id="lblSubtotal">Rp <?=$subtotal?></td>
 																</tr>
 															</tbody>
 														</table>
@@ -149,108 +156,6 @@
 										</form>		
 									<!-- shopping-cart end -->
 									
-									
-									<!-- order-complete start -->
-									<div class="tab-pane" id="order-complete">
-										<form action="#">
-											<div class="thank-recieve bg-white mb-30">
-												<p>Thank you. Your order has been received.</p>
-											</div>
-											<div class="order-info bg-white text-center clearfix mb-30">
-												<div class="single-order-info">
-													<h4 class="title-1 text-uppercase text-light-black mb-0">order no</h4>
-													<p class="text-uppercase text-light-black mb-0"><strong>m 2653257</strong></p>
-												</div>
-												<div class="single-order-info">
-													<h4 class="title-1 text-uppercase text-light-black mb-0">Date</h4>
-													<p class="text-uppercase text-light-black mb-0"><strong>june 15, 2021</strong></p>
-												</div>
-												<div class="single-order-info">
-													<h4 class="title-1 text-uppercase text-light-black mb-0">Total</h4>
-													<p class="text-uppercase text-light-black mb-0"><strong>$ 170.00</strong></p>
-												</div>
-												<div class="single-order-info">
-													<h4 class="title-1 text-uppercase text-light-black mb-0">payment method</h4>
-													<p class="text-uppercase text-light-black mb-0"><a href="#"><strong>check payment</strong></a></p>
-												</div>
-											</div>
-											<div class="shop-cart-table check-out-wrap">
-												<div class="row">
-													<div class="col-md-6">
-														<div class="our-order payment-details pr-20">
-															<h4 class="title-1 title-border text-uppercase mb-30">our order</h4>
-															<table>
-																<thead>
-																	<tr>
-																		<th><strong>Product</strong></th>
-																		<th class="text-end"><strong>Total</strong></th>
-																	</tr>
-																</thead>
-																<tbody>
-																	<tr>
-																		<td>Dummy Product Name  x 2</td>
-																		<td class="text-end">$86.00</td>
-																	</tr>
-																	<tr>
-																		<td>Dummy Product Name  x 1</td>
-																		<td class="text-end">$69.00</td>
-																	</tr>
-																	<tr>
-																		<td>Cart Subtotal</td>
-																		<td class="text-end">$155.00</td>
-																	</tr>
-																	<tr>
-																		<td>Shipping and Handing</td>
-																		<td class="text-end">$15.00</td>
-																	</tr>
-																	<tr>
-																		<td>Vat</td>
-																		<td class="text-end">$00.00</td>
-																	</tr>
-																	<tr>
-																		<td>Order Total</td>
-																		<td class="text-end">$170.00</td>
-																	</tr>
-																</tbody>
-															</table>
-														</div>
-													</div>
-													<!-- payment-method -->
-													<div class="col-md-6 mt-xs-30">
-														<div class="payment-method  pl-20">
-															<h4 class="title-1 title-border text-uppercase mb-30">payment method</h4>
-															<div class="payment-accordion">
-																<!-- Accordion start  -->
-																<h3 class="payment-accordion-toggle active">Direct Bank Transfer</h3>
-																<div class="payment-content default">
-																	<p>Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order won't be shipped until the funds have cleared in our account.</p>
-																</div> 
-																<!-- Accordion end -->
-																<!-- Accordion start -->
-																<h3 class="payment-accordion-toggle">Cheque Payment</h3>
-																<div class="payment-content">
-																	<p>Please send your cheque to Store Name, Store Street, Store Town, Store State / County, Store Postcode.</p>
-																</div>
-																<!-- Accordion end -->
-																<!-- Accordion start -->
-																<h3 class="payment-accordion-toggle">PayPal</h3>
-																<div class="payment-content">
-																	<p>Pay via PayPal; you can pay with your credit card if you don’t have a PayPal account.</p>
-																	<a href="#"><img src="img/payment/1.png" alt="" /></a>
-																	<a href="#"><img src="img/payment/2.png" alt="" /></a>
-																	<a href="#"><img src="img/payment/3.png" alt="" /></a>
-																	<a href="#"><img src="img/payment/4.png" alt="" /></a>
-																</div>
-																<!-- Accordion end --> 
-																<button class="button-one submit-button mt-15" data-text="place order" type="submit">place order</button>			
-															</div>															
-														</div>
-													</div>
-												</div>
-											</div>
-										</form>										
-									</div>
-									<!-- order-complete end -->
 								</div>
 
 							</div>
@@ -258,4 +163,207 @@
 					</div>
 				</div>
 			</div>
+<script>
+	$(document).ready(function(){
+		var sweet_loader = '<div class="sweet_loader"><svg viewBox="0 0 140 140" width="140" height="140"><g class="outline"><path d="m 70 28 a 1 1 0 0 0 0 84 a 1 1 0 0 0 0 -84" stroke="rgba(0,0,0,0.1)" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></g><g class="circle"><path d="m 70 28 a 1 1 0 0 0 0 84 a 1 1 0 0 0 0 -84" stroke="#71BBFF" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dashoffset="200" stroke-dasharray="300"></path></g></svg></div>';
+		$(document).on('click', '.btnRemove', function() {
+            var id = $(this).parent().closest('tr').find('.cart_id').val();
+
+            var item = {
+                'cartid': id
+            };
+			
+			Swal.fire({
+				title: 'Are you sure?',
+				text: "You won't be able to revert this!",
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'Yes, delete it!'
+				}).then((result) => {
+				if (result.isConfirmed) {
+					$.ajax({
+						type: 'POST',
+						url: "<?= base_url('/Shop/deleteFromCart'); ?>",
+						data: item,
+						xhr: function() {
+								var xhr = $.ajaxSettings.xhr();
+								xhr.upload.onprogress = function(e) {
+								Swal.fire({
+									html: '<h4>Loading...</h4>',
+									onRender: function() {
+										$('.Swal2-content').prepend(sweet_loader);
+									}
+								});
+							};
+							return xhr;
+						},
+						success: function(resp) {
+							var data = JSON.parse(resp);
+							console.log(data);
+							if(data == 'success') {
+								Swal.fire({
+									icon: 'success',
+									html: '<h4>Success!</h4>'
+								});
+								setTimeout(function() {
+									window.location = "<?= base_url('/mycart'); ?>";	
+								}, 1500);
+							} 
+							else if(data == 'notloggedin') {
+								window.location = "<?= base_url('/account/signin'); ?>";
+							} else {
+								setTimeout(function() {
+								Swal.fire({
+									icon: 'error',
+									html: '<h4>Whoops!</h4><h5>Something went wrong.</h5>'
+								});
+								}, 700);
+							}
+						},
+						error: function() {
+							setTimeout(function() {
+							Swal.fire({
+								icon: 'error',
+								html: '<h4>Whoops!</h4><h5>Something went wrong.</h5>'
+							});
+							}, 700);
+						}
+					});
+				}
+			})
+            
+        
+    	});
+
+		$(document).on('click', '.inc.qtybutton, .dec.qtybutton', function() {
+			var id = $(this).parent().closest('tr').find('.cart_id').val();
+			var qty = $(this).parent().find('.quantity').val();
+
+            var item = {
+                'cartid': id,
+				'qty' :qty
+            };
+
+			$.ajax({
+				type: 'POST',
+				url: "<?= base_url('/Shop/updateFromCart'); ?>",
+				data: item,
+				xhr: function() {
+						var xhr = $.ajaxSettings.xhr();
+						xhr.upload.onprogress = function(e) {
+						Swal.fire({
+							html: '<h4>Loading...</h4>',
+							onRender: function() {
+								$('.Swal2-content').prepend(sweet_loader);
+							}
+						});
+					};
+					return xhr;
+				},
+				success: function(resp) {
+					var data = JSON.parse(resp);
+					console.log(data);
+					if(data == 'success') {
+						Swal.fire({
+							icon: 'success',
+							html: '<h4>Success!</h4>'
+						});
+						setTimeout(function() {
+							window.location = "<?= base_url('/mycart'); ?>";	
+						}, 1500);
+					} 
+					else if(data == 'notloggedin') {
+						window.location = "<?= base_url('/account/signin'); ?>";
+					} else {
+						setTimeout(function() {
+						Swal.fire({
+							icon: 'error',
+							html: '<h4>Whoops!</h4><h5>Something went wrong.</h5>'
+						});
+						}, 700);
+					}
+				},
+				error: function() {
+					setTimeout(function() {
+					Swal.fire({
+						icon: 'error',
+						html: '<h4>Whoops!</h4><h5>Something went wrong.</h5>'
+					});
+					}, 700);
+				}
+			});
+		});
+
+		$(document).on('click', '#applyBtn', function() {
+			var code = $('#voucherinput').val();
+
+            var item = {
+                'code': code
+            };
+
+			$.ajax({
+				type: 'POST',
+				url: "<?= base_url('/Shop/generateVoucher'); ?>",
+				data: item,
+				xhr: function() {
+						var xhr = $.ajaxSettings.xhr();
+						xhr.upload.onprogress = function(e) {
+						Swal.fire({
+							html: '<h4>Loading...</h4>',
+							onRender: function() {
+								$('.Swal2-content').prepend(sweet_loader);
+							}
+						});
+					};
+					return xhr;
+				},
+				success: function(resp) {
+					var data = JSON.parse(resp);
+					console.log(data);
+					if(data.status == 'success') {
+						Swal.fire({
+							icon: 'success',
+							html: '<h4>Success!</h4>'
+						});
+						var discount = data.data;
+						
+						var subtot = $('#subtotal').val();
+						var discrp = discount*subtot/100;
+						var newsubtot = subtot - discrp;
+						$('#voucherhdn').val(discrp);
+						$('#lblDiscount').html('- Rp '+discrp);
+						$('#lblSubtotal').html('Rp '+newsubtot);
+					} 
+					else if(data.status == 'notvalid') {
+						Swal.fire({
+							icon: 'danger',
+							html: '<h4>Voucher Not Valid!</h4>'
+						});
+					}
+					else if(data == 'notloggedin') {
+						window.location = "<?= base_url('/account/signin'); ?>";
+					} else {
+						setTimeout(function() {
+						Swal.fire({
+							icon: 'error',
+							html: '<h4>Whoops!</h4><h5>Something went wrong.</h5>'
+						});
+						}, 700);
+					}
+				},
+				error: function() {
+					setTimeout(function() {
+					Swal.fire({
+						icon: 'error',
+						html: '<h4>Whoops!</h4><h5>Something went wrong.</h5>'
+					});
+					}, 700);
+				}
+			});
+		});
+	});
+	
+</script>
 <?= $this->endSection('content'); ?>

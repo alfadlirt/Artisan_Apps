@@ -13,6 +13,7 @@ use App\Models\TransactionModel;
 use App\Models\TransactionDetailModel;
 use App\Models\LoginLogModel;
 use App\Models\SellerModel;
+use App\Models\VoucherModel;
 
 class Shop extends BaseController
 {
@@ -29,6 +30,7 @@ class Shop extends BaseController
 	protected $TransactionDetailModel;
 	protected $LoginLogModel;
 	protected $SellerModel;
+	protected $VoucherModel;
 
 	public function __construct()
 	{
@@ -47,6 +49,7 @@ class Shop extends BaseController
 		$this->TransactionDetailModel = new TransactionDetailModel();
 		$this->LoginLogModel = new LoginLogModel();
 		$this->SellerModel = new SellerModel();
+		$this->VoucherModel = new VoucherModel();
 		$session = session();
 		$this->userid = $session->get('user_id');
 	}
@@ -71,13 +74,14 @@ class Shop extends BaseController
 				$paginateData = $builder->select('*')
 				->join($this->ProductPicModel->table, $this->ProductPicModel->table.'.prd_id = '.$this->ProductModel->table.'.prd_id', 'left')
 				->like('prd_name', (strlen($searchData['keyword'])?$searchData['keyword']:''), (strlen($searchData['keyword'])?'both':'none'))
-				->andWhere('status', 1)
+				->where('status', 1)
 				->paginate($pagesize);
 			}
 		}
 
 		$data = [
 			'datalist' => $paginateData,
+			'top2' => $builder->select('*')->limit(2)->join($this->ProductPicModel->table, $this->ProductPicModel->table.'.prd_id = '.$this->ProductModel->table.'.prd_id', 'left')->find(),
 			'category' => $this->CategoryModel->findAll(),
 			'pager' => $builder->pager,
 			'searchform' => $searchData,
@@ -106,7 +110,7 @@ class Shop extends BaseController
 				$paginateData = $builder->select('*')
 				->join($this->ProductPicModel->table, $this->ProductPicModel->table.'.prd_id = '.$this->ProductModel->table.'.prd_id', 'left')
 				->like('prd_name', (strlen($searchData['keyword'])?$searchData['keyword']:''), (strlen($searchData['keyword'])?'both':'none'))
-				->andWhere('status', 1)
+				->where('status', 1)
 				->paginate($pagesize);
 			}
 		}
@@ -142,7 +146,7 @@ class Shop extends BaseController
 		$session = session();
 		$condition = [
 			'adr_id' => $this->request->getPost('addressid'),
-			'cst_id' => 1//$session->get('user_id');
+			'cst_id' => $this->userid
         ];
         
         if ($this->request->isAJAX()) {
@@ -373,6 +377,7 @@ class Shop extends BaseController
 			'data' => $this->CartModel
 			->join($this->ProductModel->table, $this->ProductModel->table.'.prd_id = '.$this->CartModel->table.'.prd_id', 'left')
 			->join($this->ProductDetailModel->table, $this->ProductDetailModel->table.'.prd_dtl_id = '.$this->CartModel->table.'.prd_dtl_id', 'left')
+			->join($this->ProductPicModel->table, $this->ProductPicModel->table.'.prd_id = '.$this->CartModel->table.'.prd_id', 'left')
 			->where($condition)->findAll()
 		];
 		//dd($data);
@@ -451,7 +456,7 @@ class Shop extends BaseController
 
 			$condition = [
 				$this->CartModel->table.'.status' => 1,
-				'cst_id' => $user_id,
+				'cst_id' => $this->userid,
 			];
 
 			$detailwrapped = $this->CartModel
@@ -462,14 +467,14 @@ class Shop extends BaseController
 			
 
 			$this->TransactionModel->save([
-				'cst_id'=> $user_id,
+				'cst_id'=> $this->userid,
 				'address'=> $this->request->getPost('address_id'),
 				'expedition'=> $this->request->getPost('expedition_id'),
 				'payment'=> $this->request->getPost('payment_id'),
 				'discount'=> $this->request->getPost('discount'),
 				'notes'=> $this->request->getPost('notes'),
 				'total_paid_price'=> $this->request->getPost('subtotal'),
-				'created_by' => $user_id
+				'created_by' => $this->userid
 			]);
 
 			$inserted = $this->TransactionModel->getInsertID();
@@ -479,10 +484,10 @@ class Shop extends BaseController
 					'trs_id' => $inserted,
 					'prd_id' => $row['prd_id'],
 					'prd_dtl_id' => $row['prd_dtl_id'],
-					'qty' => $row['stock'],
+					'qty' => $row['qty'],
 					'original_price' => $row['price'],
-					'subtotal' =>  $row['price']*$row['stock'],
-					'created_by' => $user_id
+					'subtotal' =>  $row['price']*$row['qty'],
+					'created_by' => $this->userid
 				]);
 			}
 
@@ -589,7 +594,7 @@ class Shop extends BaseController
                 $productid = $this->request->getPost('productid');
                 $detailid = $this->request->getPost('detailid');
                 $qty = $this->request->getPost('qty');
-                $custid = 1;//$id_cust;
+                $custid = $this->userid;//$id_cust;
 
 				$condition2 = [
 					'prd_dtl_id' => $detailid,
@@ -625,6 +630,90 @@ class Shop extends BaseController
             }
         }
     }
+
+	public function deleteFromCart()
+    {
+        if ($this->request->isAJAX()) {
+			header('Content-Type: application/json');
+            if (isset($this->userid)) {
+                $cartid = $this->request->getPost('cartid');
+
+				$condition = [
+					'crt_id' => $cartid
+				];
+
+				$this->CartModel
+				->where($condition)
+				->delete();
+                
+                echo json_encode('success');
+            } else {
+                echo json_encode('notloggedin');
+            }
+        }
+    }
+
+	public function updateFromCart()
+    {
+        if ($this->request->isAJAX()) {
+			header('Content-Type: application/json');
+            if (isset($this->userid)) {
+                $cartid = $this->request->getPost('cartid');
+				$qty = $this->request->getPost('qty');
+
+				$condition = [
+					'crt_id' => $cartid
+				];
+
+				$this->CartModel
+					->where($condition)
+					->set([
+						'qty' => $qty
+						])
+					->update();
+                
+                echo json_encode('success');
+            } else {
+                echo json_encode('notloggedin');
+            }
+        }
+    }
+
+	public function generateVoucher()
+    {
+        if ($this->request->isAJAX()) {
+			header('Content-Type: application/json');
+            if (isset($this->userid)) {
+                $code = $this->request->getPost('code');
+
+				$condition = [
+					'vcr_code' => $code
+				];
+
+				$data = $this->VoucherModel
+					->where($condition)
+					->first();
+				
+				if(isset($data)){
+					$item = [
+						'status'=>'success',
+						'data'=>$data['discount']
+					];
+					echo json_encode($item);	
+				}
+				else{
+					$item = [
+						'status'=>'notvalid',
+						'data'=>''
+					];
+					echo json_encode($item);	
+				}
+            } else {
+                echo json_encode('notloggedin');
+            }
+        }
+    }
+
 
 	public function delete($id){
 		if ($this->request->isAJAX()) {

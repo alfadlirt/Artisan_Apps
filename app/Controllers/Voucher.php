@@ -10,10 +10,13 @@ class Voucher extends BaseController
 		helper('rownumber_helper');
 		helper(['form', 'url']);
 		$this->VoucherModel = new VoucherModel();
+		$session = session();
+		$this->userid = $session->get('user_id');
 	}
 
 	public function index()
 	{
+		
 		$searchData = $this->request->getGet();
 		$pagesize = (isset($searchData['pgsz'])?$searchData['pgsz']:10);
 

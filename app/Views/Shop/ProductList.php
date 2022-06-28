@@ -63,7 +63,7 @@
 								</div>
 								<div class="product-info clearfix text-center">
 									<div class="fix">
-										<h4 class="post-title"><a href="#"><?=$row['name']?></a></h4>
+										<h4 class="post-title"><a href="<?=base_url('product/'.$row['slug'])?>"><?=$row['name']?></a></h4>
 									</div>
 									<div class="fix">
 										<label class="muted-text">Rp <?=$row['display_price']?></label>

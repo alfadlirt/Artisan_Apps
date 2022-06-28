@@ -403,7 +403,7 @@ class Shop extends BaseController
 				'status' => 1
 			])->findAll(),
 			'address' => $this->CustomerAdrModel->where([
-				'cst_id' => 1
+				'cst_id' => $this->userid
 			])->findAll()
 		];
 		//dd($data);
@@ -446,7 +446,7 @@ class Shop extends BaseController
 					'status' => 1
 				])->findAll(),
 				'address' => $this->CustomerAdrModel->where([
-					'cst_id' => 1
+					'cst_id' => $this->userid
 				])->findAll(),
 				'validation' => $this->validator
 			];

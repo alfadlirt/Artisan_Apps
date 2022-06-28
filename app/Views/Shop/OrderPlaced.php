@@ -104,8 +104,8 @@
 																	</tr>
 																	<tr>
 																		<td>Order Total</td>
-																		<input type="hidden" name="subtotal" id="subtotal" value="<?=$subtotal?>"/>
-																		<td class="text-end">Rp <?=$subtotal?></td>
+																		<input type="hidden" name="subtotal" id="subtotal" value="<?=$subtotal-$transaction['discount']?>"/>
+																		<td class="text-end">Rp <?=$subtotal-$transaction['discount']?></td>
 																	</tr>
 														</tbody>
 													</table>

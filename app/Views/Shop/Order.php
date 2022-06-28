@@ -1,13 +1,13 @@
 <?= $this->extend('Layout/_Layout3') ?>
 
 <?= $this->section('content'); ?>
-<div class="heading-banner-area overlay-bg">
+<div class="heading-banner-area2 overlay-bg">
 				<div class="container">
 					<div class="row">
 						<div class="col-md-12">
 							<div class="heading-banner">
 								<div class="heading-banner-title">
-									<h2>Shopping Cart</h2>
+									<h2>My Order</h2>
 								</div>
 								<div class="breadcumbs pb-15">
 									<ul>

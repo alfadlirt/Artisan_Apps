@@ -12,4 +12,8 @@ class Home extends BaseController
 	{
 		return view('Dashboard/Dashboard');
 	}
+	public function Seller()
+	{
+		return view('Dashboard/DashboardSeller');
+	}
 }

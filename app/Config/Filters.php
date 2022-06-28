@@ -10,11 +10,27 @@ class Filters extends BaseConfig
 		'csrf'     => \CodeIgniter\Filters\CSRF::class,
 		'toolbar'  => \CodeIgniter\Filters\DebugToolbar::class,
 		'honeypot' => \CodeIgniter\Filters\Honeypot::class,
+		'authRestrict' => \App\Filters\AuthRestrict::class,
 	];
 
 	// Always applied before every request
 	public $globals = [
 		'before' => [
+			'authRestrict'=> ['except' => [
+				'',
+				'login', 
+				'login/*',
+				'product',
+				'product/*',
+				'register', 
+				'create-account',
+				'seller/create-account',
+				'admin/login', 
+				'admin/login/*',
+				'seller/register', 
+				'seller/login', 
+				'seller/login/*'
+			]],
 			//'honeypot'
 			// 'csrf',
 		],

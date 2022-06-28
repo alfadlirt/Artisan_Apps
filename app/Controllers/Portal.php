@@ -3,27 +3,119 @@
 namespace App\Controllers;
 
 use App\Models\AdminModel;
+use App\Models\CustomerModel;
+use App\Models\SellerModel;
 
 class Portal extends BaseController
 {
     protected $adminModel;
+    protected $customerModel;
+    protected $sellerModel;
     protected $session;
 
     public function __construct()
     {
         $this->adminModel = new AdminModel();
+        $this->customerModel = new CustomerModel();
+        $this->sellerModel = new SellerModel();
         $this->session = session();
         //$this->email = \Config\Services::email();
     }
 
     public function AdminLogin()
     {
-        return view('Portal/Login');
+        return view('Portal/AdminLogin');
     }
 
-    public function authentication()
+    public function SellerLogin()
     {
-        /*
+        return view('Portal/SellerLogin');
+    }
+
+    public function CustomerLogin()
+    {
+        return view('Portal/CustomerLogin');
+    }
+
+    public function CustomerRegister()
+    {
+        return view('Portal/CustomerRegister');
+    }
+
+    public function SellerRegister()
+    {
+        return view('Portal/SellerRegister');
+    }
+
+    public function authenticationCustomer()
+    {
+        
+        $input_uname = $this->request->getVar('username');
+        $input_password = $this->request->getVar('password');
+        $array = ['usrname' => $input_uname, 'status' => 1];
+        $check = $this->customerModel->where($array)->first();
+
+        $data = [
+			'username' => $input_uname,
+		];
+        
+        if ($check) {
+            $pass = $check['pswrd'];
+            
+            if (password_verify($input_password, $pass)) {
+                $session_data = [
+                    'user_id' => $check['cst_id'],
+                    'user_name' => $check['f_name'].' '.$check['l_name'],
+                    'user_username' => $check['usrname'],
+                    'role' => $check['role'],
+                    'profile_pic' => $check['pic'],
+                    'logged_in' => true
+                ];
+                $this->session->set($session_data);
+
+                return redirect()->to(base_url() . "/");
+                
+            }
+        }
+        $this->session->setFlashdata('authresult', 'Username or Password Not Match!');
+        return view('Portal/CustomerLogin', $data);
+    }
+
+    public function authenticationSeller()
+    {
+        $input_uname = $this->request->getVar('username');
+        $input_password = $this->request->getVar('password');
+        $array = ['usrname' => $input_uname, 'status' => 1];
+        $check = $this->sellerModel->where($array)->first();
+
+        $data = [
+			'username' => $input_uname,
+		];
+        
+        if ($check) {
+            $pass = $check['pswrd'];
+            
+            if (password_verify($input_password, $pass)) {
+                $session_data = [
+                    'user_id' => $check['slr_id'],
+                    'user_name' => $check['f_name'].' '.$check['l_name'],
+                    'user_username' => $check['usrname'],
+                    'role' => $check['role'],
+                    'profile_pic' => $check['pic'],
+                    'logged_in' => true
+                ];
+                $this->session->set($session_data);
+
+                return redirect()->to(base_url("/dashboard-seller"));
+                
+            }
+        }
+        $this->session->setFlashdata('authresult', 'Username or Password Not Match!');
+        return view('Portal/SellerLogin', $data);
+    }
+
+    public function authenticationAdmin()
+    {
         $input_uname = $this->request->getVar('username');
         $input_password = $this->request->getVar('password');
         $array = ['usrname' => $input_uname, 'status' => 1];
@@ -38,7 +130,7 @@ class Portal extends BaseController
             
             if (password_verify($input_password, $pass)) {
                 $session_data = [
-                    'user_id' => $check['usr_id'],
+                    'user_id' => $check['adm_id'],
                     'user_name' => $check['f_name'].' '.$check['l_name'],
                     'user_username' => $check['usrname'],
                     'role' => $check['role'],
@@ -47,14 +139,12 @@ class Portal extends BaseController
                 ];
                 $this->session->set($session_data);
 
-                return redirect()->to(base_url() . "/");
+                return redirect()->to(base_url("/dashboard-admin"));
                 
             }
         }
         $this->session->setFlashdata('authresult', 'Username or Password Not Match!');
-        return view('Login', $data);*/
-
-        return redirect()->to(base_url("/Dashboard"));
+        return view('Portal/AdminLogin', $data);
     }
 
     public function profile(){
@@ -211,7 +301,103 @@ class Portal extends BaseController
 			return redirect()->to(base_url('profile'));
         }
     }
-
+    public function addCustomer()
+	{
+        $input = $this->validate([
+			'f_name' => 'required',
+            'l_name' => 'required',
+            'telp' => 'required|min_length[10]',
+            'email' => 'required|valid_email',
+            'usrname' => 'required|is_unique['.$this->customerModel->table.'.usrname'.']|min_length[10]',
+            'pass1' => 'required|min_length[8]',
+            'pass2' => 'required|min_length[8]|matches[pass1]',
+        ]);
+		if (!$input) {
+			//dd($this->validator);
+			$data = [
+				'data' => [
+					'f_name' => $this->request->getPost('f_name'),
+                    'l_name' => $this->request->getPost('l_name'),
+                    'telp' => $this->request->getPost('telp'),
+                    'email' => $this->request->getPost('email'),
+                    'usrname' => $this->request->getPost('usrname'),
+                    'pass1' => $this->request->getPost('pass1'),
+                    'pass2' => $this->request->getPost('pass2')
+				],
+				'validation' => $this->validator
+			];
+			
+            echo view('Portal/CustomerRegister', $data);
+        } else {
+			$this->customerModel->save([
+				'f_name'=> $this->request->getPost('f_name'),
+                'l_name'=> $this->request->getPost('l_name'),
+                'telp'=> $this->request->getPost('telp'),
+                'email'=> $this->request->getPost('email'),
+                'usrname'=> $this->request->getPost('usrname'),
+                'pswrd'=> password_hash($this->request->getPost('pass1'), PASSWORD_DEFAULT),
+                'status'=> 1,
+                'created_by' => 'system',//$session->get('user_id')
+                'modified_by' => 'system'//$session->get('user_id')
+			]);
+			//dd($this->PaymentModel->getInsertID());
+			session()->setFlashdata('state', 1);
+			return redirect()->to(base_url()."/login");
+        }
+	}
+    public function addSeller()
+	{
+        $input = $this->validate([
+            'shop_name' => 'required|is_unique['.$this->sellerModel->table.'.shop_name'.']',
+            'shop_description' => 'required',
+            'shop_address' => 'required',
+			'f_name' => 'required',
+            'l_name' => 'required',
+            'telp' => 'required|min_length[10]',
+            'email' => 'required|valid_email',
+            'usrname' => 'required|is_unique['.$this->customerModel->table.'.usrname'.']|min_length[10]',
+            'pass1' => 'required|min_length[8]',
+            'pass2' => 'required|min_length[8]|matches[pass1]',
+        ]);
+		if (!$input) {
+			//dd($this->validator);
+			$data = [
+				'data' => [
+                    'shop_name' => $this->request->getPost('shop_name'),
+                    'shop_description' => $this->request->getPost('shop_description'),
+                    'shop_address' => $this->request->getPost('shop_address'),
+					'f_name' => $this->request->getPost('f_name'),
+                    'l_name' => $this->request->getPost('l_name'),
+                    'telp' => $this->request->getPost('telp'),
+                    'email' => $this->request->getPost('email'),
+                    'usrname' => $this->request->getPost('usrname'),
+                    'pass1' => $this->request->getPost('pass1'),
+                    'pass2' => $this->request->getPost('pass2')
+				],
+				'validation' => $this->validator
+			];
+			
+            echo view('Portal/SellerRegister', $data);
+        } else {
+			$this->sellerModel->save([
+                'shop_name' => $this->request->getPost('shop_name'),
+                'shop_description' => $this->request->getPost('shop_description'),
+                'shop_address' => $this->request->getPost('shop_address'),
+				'f_name'=> $this->request->getPost('f_name'),
+                'l_name'=> $this->request->getPost('l_name'),
+                'telp'=> $this->request->getPost('telp'),
+                'email'=> $this->request->getPost('email'),
+                'usrname'=> $this->request->getPost('usrname'),
+                'pswrd'=> password_hash($this->request->getPost('pass1'), PASSWORD_DEFAULT),
+                'status'=> 1,
+                'created_by' => 'system',//$session->get('user_id')
+                'modified_by' => 'system'//$session->get('user_id')
+			]);
+			//dd($this->PaymentModel->getInsertID());
+			session()->setFlashdata('state', 1);
+			return redirect()->to(base_url()."/seller/login");
+        }
+	}
     public function myaccount()
     {
         $id_cust = $this->session->get('user_id');

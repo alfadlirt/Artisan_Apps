@@ -31,10 +31,37 @@ $routes->setAutoRoute(true);
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->get('/', 'Portal::AdminLogin');
-$routes->get('/Dashboard', 'Home::Index');
+//$routes->get('/', 'Portal::AdminLogin');
+$routes->get('/', 'Shop::Index');
+$routes->get('/product/(:segment)', 'Shop::detail/$1');
+$routes->get('/product', 'Shop::ProductList');
+$routes->get('/mycart', 'Shop::Cart');
+$routes->post('/checkout', 'Shop::Checkout');
+$routes->get('/order-placed/(:segment)', 'Shop::OrderPlaced/$1');
 
-$routes->post('/login/auth', 'Portal::authentication');
+$routes->get('/myorder', 'Shop::MyOrder');
+$routes->get('/myorder/(:segment)', 'Shop::MyOrderDetail/$1');
+
+$routes->get('/login', 'Portal::CustomerLogin');
+$routes->get('/admin/login', 'Portal::AdminLogin');
+$routes->get('/seller/login', 'Portal::SellerLogin');
+$routes->get('/register', 'Portal::CustomerRegister');
+$routes->get('/seller/register', 'Portal::SellerRegister');
+
+$routes->get('/myaccount', 'Shop::MyAccount');
+$routes->post('/myaccount/profile/update', 'Shop::updateProfile');
+$routes->post('/myaccount/address/update', 'Shop::updateAddress');
+$routes->post('/myaccount/address/add', 'Shop::addAddress');
+
+$routes->post('/create-account', 'Portal::addCustomer');
+$routes->post('/seller/create-account', 'Portal::addSeller');
+
+$routes->get('/dashboard-admin', 'Home::Index');
+$routes->get('/dashboard-seller', 'Home::Seller');
+
+$routes->post('/login/authseller', 'Portal::authenticationSeller');
+$routes->post('/login/authadmin', 'Portal::authenticationAdmin');
+$routes->post('/login/authcustomer', 'Portal::authenticationCustomer');
 $routes->get('/logout', 'Portal::logout');
 
 $routes->get('/profile', 'UserLogin::profile');

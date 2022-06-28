@@ -26,7 +26,7 @@
                     <h4 class="mt-0 header-title">Add New Product Entry</h4>
                     <a href="<?= base_url('Product/Index');?>" class="btn btn-sm btn-outline-secondary mb-2">Back</a>
                     <?php $validation = \Config\Services::validation(); ?>
-                    <form method="post" action="<?= base_url('Product/Save') ?>" id="formCreate">
+                    <form method="post" action="<?= base_url('Product/Save') ?>" id="formCreate" enctype='multipart/form-data'>
                     <input type="hidden" id="arraydetail" name="variationdata">
                     <div style="margin-top:50px">
                         <div class="form-group">

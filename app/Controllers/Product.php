@@ -118,6 +118,7 @@ class Product extends BaseController
 			$this->ProductModel->save([
 				'name'=> $this->request->getPost('name'),
 				'slug'=> url_title($this->request->getPost('name'), '-', true),
+				'slr_id'=> $this->userid,
 				'ktg_id'=> $this->request->getPost('ktg_id'),
 				'description'=> $this->request->getPost('description'),
 				'is_discount' => 0,
@@ -141,7 +142,7 @@ class Product extends BaseController
 					'status' => 1
 				]);
 			}
-
+			$files = $this->request->getFiles();
 			$imgContent = file_get_contents($files['mainpic']->getTempName());
 
 			$this->ProductPicModel->save([

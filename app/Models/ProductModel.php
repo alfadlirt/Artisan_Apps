@@ -11,6 +11,7 @@ class ProductModel extends Model
     protected $useTimestamps = false;
     protected $allowedFields = [
         'slug', 
+        'slr_id',
         'ktg_id', 
         'name', 
         'description', 

@@ -11,7 +11,7 @@ class LoginLogModel extends Model
     protected $allowedFields = [
         'login_date', 
         'client', 
-        'cust_id'
+        'cst_id'
     ];
     
 }

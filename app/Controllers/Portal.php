@@ -5,12 +5,14 @@ namespace App\Controllers;
 use App\Models\AdminModel;
 use App\Models\CustomerModel;
 use App\Models\SellerModel;
+use App\Models\LoginLogModel;
 
 class Portal extends BaseController
 {
     protected $adminModel;
     protected $customerModel;
     protected $sellerModel;
+    protected $loginLogModel;
     protected $session;
 
     public function __construct()
@@ -18,6 +20,7 @@ class Portal extends BaseController
         $this->adminModel = new AdminModel();
         $this->customerModel = new CustomerModel();
         $this->sellerModel = new SellerModel();
+        $this->loginLogModel = new LoginLogModel();
         $this->session = session();
         //$this->email = \Config\Services::email();
     }
@@ -71,6 +74,13 @@ class Portal extends BaseController
                     'profile_pic' => $check['pic'],
                     'logged_in' => true
                 ];
+
+                $this->loginLogModel->save([
+                    'login_date'=> $updated = date("Y-m-d H:i:s"), 
+                    'client'=> 'Jakarta', 
+                    'cst_id'=> $check['cst_id']
+                ]);
+
                 $this->session->set($session_data);
 
                 return redirect()->to(base_url() . "/");
@@ -104,6 +114,7 @@ class Portal extends BaseController
                     'profile_pic' => $check['pic'],
                     'logged_in' => true
                 ];
+
                 $this->session->set($session_data);
 
                 return redirect()->to(base_url("/dashboard-seller"));
